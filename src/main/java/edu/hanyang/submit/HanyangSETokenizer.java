@@ -13,6 +13,7 @@ public class HanyangSETokenizer implements Tokenizer {
     @Override
     public void setup() {
         // TODO: your code here...
+        // My code
     }
 
     /**
