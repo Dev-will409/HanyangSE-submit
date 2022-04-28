@@ -32,7 +32,7 @@ public class HanyangSEExternalSort implements ExternalSort {
             tmp.setLeft(input.read());
             tmp.setMiddle(input.read());
             tmp.setRight(input.read());
-            detaArr.add(tmp);
+            dataArr.add(tmp);
         }
 
 

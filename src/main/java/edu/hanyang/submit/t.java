@@ -8,19 +8,25 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class t {
+    public void mergesort(ArrayList<MutableTriple<Integer, Integer, Integer>> dataArr, int nblocks) {
+        
+    }
     public static void main(String[] args) throws IOException {
         String path = "data/input_10000000.data";
-        int nblocks = 1000;
+        int nblocks = 5;
+        int i = 0;
         File in = new File (path);
         FileInputStream input = new FileInputStream(in);
-        ArrayList<MutableTriple<Integer, Integer, Integer>> detaArr = new ArrayList<>(nblocks);
+        ArrayList<MutableTriple<Integer, Integer, Integer>> dataArr = new ArrayList<>(nblocks);
         while (input.available()!=0){
-            MutableTriple<Integer, Integer , Integer> tmp = new MutableTriple<>();
+            i++;
+            if(i==6) break;
+            MutableTriple<Integer, Integer, Integer> tmp = new MutableTriple<>();
             tmp.setLeft(input.read());
             tmp.setMiddle(input.read());
             tmp.setRight(input.read());
-            detaArr.add(tmp);
-            System.out.print(detaArr);
+            dataArr.add(tmp);
         }
+        System.out.print(dataArr);
     }
 }
