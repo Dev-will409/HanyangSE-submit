@@ -22,6 +22,13 @@ public class HanyangSETokenizer implements Tokenizer {
     private Analyzer analyzer = null;
     private PorterStemmer s = null;
 
+    public static void main(String[] args) {
+        HanyangSETokenizer a = new HanyangSETokenizer();
+        a.setup();
+        a.split("Unless she is more earnest in her studies, she will not be able to keep up with the class.");
+        a.clean();
+    }
+
     @Override
     public void setup() {
         // TODO: your code here...
@@ -42,6 +49,7 @@ public class HanyangSETokenizer implements Tokenizer {
         try {
             TokenStream stream = analyzer.tokenStream(null, new StringReader(str));
             stream.reset();
+            System.out.println(stream);
             while (stream.incrementToken()){
                 result.add(stemString(stream.getAttribute(CharTermAttribute.class).toString()));
             }

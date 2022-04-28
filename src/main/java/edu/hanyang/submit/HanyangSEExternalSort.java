@@ -4,6 +4,8 @@ import java.io.DataInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.PriorityQueue;
 
 import io.github.hyerica_bdml.indexer.ExternalSort;
@@ -23,28 +25,32 @@ public class HanyangSEExternalSort implements ExternalSort {
     @Override
     public void sort(String infile, String outfile, String tmpdir, int blocksize, int nblocks) throws IOException {
         //initial phase
-        ArrayList <MutableTriple<Integer, Integer, Integer>> dataArr = new ArrayList<>()(nElement);
-        ...
+        ArrayList <MutableTriple<Integer, Integer, Integer>> dataArr = new ArrayList<>(nElement);
+        /*
+        fill in
+         */
 
         //n-way merge
         _externalMergesort(tmpdir, outfile, 0);
     }
 
-    private void _externalMergesort(String tmpDir, String Outputfile, int step) throws IOException {
+    private void _externalMergesort(String tmpDir, String outputfile, int step) throws IOException {
         File[] fileArr = (new File (tmpDir + File.separator + String.valueOf(prevStep))).listFiles();
         if (fileArr.length <= nblocks -1 ) {
-            for (FIle f : fileArr) {
-                DataInputStream Dos = new DataInputStream(f.getAbsolute.Path(), blocksize);
-                ...
+            for (File f : fileArr) {
+                DataInputStream Dos = new DataInputStream(f.getAbsolutePath(), blocksize);
+                /*
+                fill in
+                 */
             }
         }
         else {
-            for (FIle f : file Arr) {
+            for (File f : fileArr) {
 
 
                 cnt++;
                 if(cnt == nblocks - 1) {
-                    n_way_merge(...);
+                    n_way_merge(/* fill in*/);
                 }
             }
             _externalMergesort(tmpDir, outputfile, step+1);
@@ -52,8 +58,8 @@ public class HanyangSEExternalSort implements ExternalSort {
     }
 
     public void n_way_merge(List<DataInputStream> files, String outputFile) throws IOException {
-        priorityQueue<DataManager> queue = new PriorityQueue<>(files.size(), new Comparator<DataManager>() {
-            public int compare(DataManager o1, dataManager o2) {
+        PriorityQueue<DataManager> queue = new PriorityQueue<>(files.size(), new Comparator<DataManager>() {
+            public int compare(DataManager o1, DataManager o2) {
                 return o1.tuple.compareTo(o2.tuple);
             }
         });
@@ -61,7 +67,9 @@ public class HanyangSEExternalSort implements ExternalSort {
         while (queue.size() != 0) {
             DataManager dm = queue.poll();
             MutableTriple<Integer, Integer, Integer> tmp = dm.getTuple();
-            ...
+            /*
+            fill in
+             */
         }
     }
  }
