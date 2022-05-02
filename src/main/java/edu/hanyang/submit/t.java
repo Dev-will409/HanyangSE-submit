@@ -8,31 +8,82 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class t {
-
-    public static ArrayList<MutableTriple<Integer, Integer, Integer>> mergesort(ArrayList<MutableTriple<Integer, Integer, Integer>> dataArr, int start, int end) {
-        if (start < end) {
-            ArrayList<MutableTriple<Integer, Integer, Integer>> tmp = new ArrayList<>(end);
-            int mid = (start + end) / 2;
-            mergesort(dataArr, start, mid);
-            mergesort(dataArr, mid + 1, end);
-            int p = start;
-            int q = mid + 1;
-            int idx = p;
-            while (p <= mid || q <= end) {
-                if (q > end || p <= mid && (dataArr.get(p).getLeft() <= dataArr.get(q).getLeft() && dataArr.get(p).getMiddle() <= dataArr.get(q).getMiddle() && dataArr.get(p).getRight() <= dataArr.get(q).getRight())) {
-                    tmp.add(dataArr.get(p++));
+    public static void merge(ArrayList<MutableTriple<Integer, Integer, Integer>> dataArr, int left, int mid, int right) {
+        int l = left;
+        int r = mid +1;
+        int idx = left;
+        ArrayList<MutableTriple<Integer, Integer, Integer>> tmp = new ArrayList<>(dataArr.size());
+        for(int i=0; i<dataArr.size(); i++) {
+            MutableTriple<Integer, Integer, Integer> t = new MutableTriple<>();
+            t.setLeft(null);
+            t.setMiddle(null);
+            t.setRight(null);
+            tmp.add(t);
+        }
+        while(l <= mid && r <= right) {
+            if(dataArr.get(l).getLeft() < dataArr.get(r).getLeft()) {
+                tmp.set(idx, dataArr.get(l));
+                idx++;
+                l++;
+            }
+            else if (dataArr.get(l).getLeft() > dataArr.get(r). getLeft()) {
+                tmp.set(idx, dataArr.get(r));
+                idx++;
+                r++;
+            }
+            else {
+                if(dataArr.get(l).getMiddle() < dataArr.get(r).getMiddle()) {
+                    tmp.set(idx, dataArr.get(l));
                     idx++;
-                } else {
-                    tmp.add(dataArr.get(q++));
+                    l++;
+                }
+                else if (dataArr.get(l).getMiddle() > dataArr.get(r).getMiddle()) {
+                    tmp.set(idx, dataArr.get(r));
                     idx++;
+                    r++;
+                }
+                else {
+                    if(dataArr.get(l).getRight() <= dataArr.get(r).getRight()) {
+                        tmp.set(idx, dataArr.get(l));
+                        idx++;
+                        l++;
+                    }
+                    else {
+                        tmp.set(idx, dataArr.get(r));
+                        idx++;
+                        r++;
+                    }
                 }
             }
-            return tmp;
         }
-        return null;
+        if(l > mid) {
+            while(r <= right) {
+                tmp.set(idx, dataArr.get(r));
+                idx++;
+                r++;
+            }
+        }
+        else {
+            while(l<=mid) {
+                tmp.set(idx, dataArr.get(l));
+                idx++;
+                l++;
+            }
+        }
+        for(int i=left; i <= right; i++) {
+            dataArr.set(i, tmp.get(i));
+        }
     }
-
-
+    public static void merge_sort(ArrayList<MutableTriple<Integer, Integer, Integer>> dataArr, int left, int right) {
+        for(int size = 1; size <= right; size+=size) {
+            for(int l=0; l<=right-size; l +=(2*size)) {
+                int low = l;
+                int mid = l+size -1;
+                int high = Math.min(l+(2*size)-1, right);
+                merge(dataArr, low, mid, high);
+            }
+        }
+    }
 
     public static void main(String[] args) throws IOException {
         String path = "data/input_10000000.data";
@@ -50,7 +101,7 @@ public class t {
             tmp.setRight(input.read());
             dataArr.add(tmp);
         }
-        ArrayList<MutableTriple<Integer, Integer, Integer>> temp = new ArrayList<>(nblocks);
-        System.out.print(mergesort(dataArr, 0, 4));
+        merge_sort(dataArr, 0, dataArr.size()-1);
+        System.out.print(dataArr);
     }
 }
