@@ -9,8 +9,27 @@ import java.util.PriorityQueue;
 
 import io.github.hyerica_bdml.indexer.ExternalSort;
 import org.apache.commons.lang3.tuple.MutableTriple;
-/*
 
+class DataManagers {
+    public boolean isEOF = false;
+    private DataInputStream dis = null;
+    public MutableTriple<Integer, Integer, Integer> tuple = new MutableTriple<Integer, Integer, Integer>(0,0,0);
+    public DataManagers(DataInputStream dis) throws IOException {
+        ;
+    }
+
+    private  boolean readNext() throws IOException {
+        if (isEOF) return false;
+        tuple.setLeft(dis.readInt()); tuple.setMiddle(dis.readInt()); tuple.setRight(dis.readInt());
+        return true;
+    }
+
+    public void getTuple(MutableTriple<Integer, Integer, Integer> ret) throws  IOException {
+        ret.setLeft(tuple.getLeft()); ret.setMiddle(tuple.getMiddle()); ret.setRight(tuple.getRight());
+        isEOF = (! readNext());
+    }
+ }
+/*
 public class HanyangSEExternalSort implements ExternalSort {
 
     /**
@@ -20,6 +39,7 @@ public class HanyangSEExternalSort implements ExternalSort {
      * @param tmpdir    임시파일을 위한 디렉토리
      * @param blocksize 허용된 메모리 블록 하나의 크기
      * @param nblocks   허용된 메모리 블록 개수
+
 
     @Override
     public void sort(String infile, String outfile, String tmpdir, int blocksize, int nblocks) throws IOException {
@@ -76,4 +96,5 @@ public class HanyangSEExternalSort implements ExternalSort {
     }
 
  }
+
 */

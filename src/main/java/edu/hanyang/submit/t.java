@@ -2,11 +2,33 @@ package edu.hanyang.submit;
 
 import org.apache.commons.lang3.tuple.MutableTriple;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.PriorityQueue;
 
+class DataManager {
+    public boolean isEOF = false;
+    private DataInputStream dis = null;
+    public MutableTriple<Integer, Integer, Integer> tuple = new MutableTriple<Integer, Integer, Integer>(0,0,0);
+    public DataManager(DataInputStream dis) throws IOException {
+        this.dis = dis;
+        readNext();
+    }
+
+    private  boolean readNext() throws IOException {
+        if (isEOF) return false;
+        tuple.setLeft(dis.read()); tuple.setMiddle(dis.read()); tuple.setRight(dis.read());
+        return true;
+    }
+
+    public void getTuple(MutableTriple<Integer, Integer, Integer> ret) throws  IOException {
+        ret.setLeft(tuple.getLeft()); ret.setMiddle(tuple.getMiddle()); ret.setRight(tuple.getRight());
+        isEOF = (! readNext());
+    }
+
+}
 public class t {
     public static void merge(ArrayList<MutableTriple<Integer, Integer, Integer>> dataArr, int left, int mid, int right) {
         int l = left;
@@ -84,13 +106,52 @@ public class t {
             }
         }
     }
+    public void n_way(List<DataInputStream> files, String outputfile) throws IOException {
+        PriorityQueue<DataManager> queue = new PriorityQueue<>(5, new Comparator<DataManager>() {
+            @Override
+            public int compare(DataManager o1, DataManager o2) {
+                return o1.tuple.compareTo(o2.tuple);
+            }
+        });
+
+        for (DataInputStream f : files) {
+            DataManager block = new DataManager(f);
+            queue.add(block);
+        }
+
+        ArrayList<MutableTriple<Integer, Integer, Integer>> dataArr = new ArrayList<>();
+        File output = new File(outputfile);
+        FileOutputStream fos = new FileOutputStream(output);
+
+        while (queue.size() != 0) {
+            DataManager dm = queue.poll();
+            MutableTriple<Integer, Integer, Integer> tmp = new MutableTriple<>();
+            dm.getTuple(tmp);
+            dataArr.add(tmp);
+            if(dataArr.size() == 5 || queue.size() == 0) {
+                for(int i=0; i<5; i++) {
+                    fos.write(dataArr.get(i).getLeft());
+                    fos.write(dataArr.get(i).getMiddle());
+                    fos.write(dataArr.get(i).getRight());
+                }
+                dataArr.clear();
+            }
+            if(dm.isEOF) {
+                queue.add(dm);
+            }
+        }
+        fos.close();
+    }
 
     public static void main(String[] args) throws IOException {
         String path = "data/input_10000000.data";
+
         int nblocks = 5;
         int i = 0;
+
         File in = new File (path);
         FileInputStream input = new FileInputStream(in);
+        /*
         ArrayList<MutableTriple<Integer, Integer, Integer>> dataArr = new ArrayList<>(nblocks);
         while (input.available()!=0) {
             i++;
@@ -101,7 +162,30 @@ public class t {
             tmp.setRight(input.read());
             dataArr.add(tmp);
         }
-        merge_sort(dataArr, 0, dataArr.size()-1);
-        System.out.print(dataArr);
+        */
+        //merge_sort(dataArr, 0, dataArr.size()-1);
+        //System.out.print(dataArr);
+        //input.close();
+        /*
+        DataInputStream IN = new DataInputStream(input);
+        DataManager d = new DataManager(IN);
+        System.out.println(IN.read());
+        MutableTriple<Integer, Integer, Integer> t = new MutableTriple<>();
+        d.getTuple(t);
+        System.out.println(d.tuple);
+        queue.add(d);
+        MutableTriple<Integer, Integer, Integer> tt = new MutableTriple<>();
+        d.getTuple(tt);
+        System.out.println(d.tuple);
+        queue.add(d);
+        MutableTriple<Integer, Integer, Integer> ttt = new MutableTriple<>();
+        d.getTuple(ttt);
+        System.out.println(d.tuple);
+        queue.add(d);
+        */
+        MutableTriple<Integer, Integer, Integer> t = new MutableTriple<>(1,1,1);
+        MutableTriple<Integer, Integer, Integer> tt = new MutableTriple<>(0,1,3);
+        System.out.println(tt.compareTo(t));
+
     }
 }
