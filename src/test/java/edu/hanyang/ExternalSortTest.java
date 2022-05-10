@@ -52,7 +52,7 @@ public class ExternalSortTest {
         sort.sort(INPUT_DATA_PATH, OUTPUT_DATA_PATH, TEMP_DIR_PATH, BLOCKSIZE, N_BLOCKS);
         long duration = System.currentTimeMillis() - currentTime;
         System.out.println("Duration: " + ((double) duration / 1000.0));
-        System.out.println("available memroy = " +
+        System.out.println("available memory = " +
                 ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getMax());
         try (FileInputStream fin = new FileInputStream(OUTPUT_DATA_PATH);
              BufferedInputStream bin = new BufferedInputStream(fin);

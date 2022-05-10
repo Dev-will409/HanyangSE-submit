@@ -10,9 +10,8 @@ public class DataManager {
     private DataInputStream dis=null;
     public MutableTriple<Integer,Integer,Integer> tuple = new MutableTriple<Integer,Integer,Integer>(0,0,0);
     public DataManager(DataInputStream dis) throws IOException{
-        /*
-        fill in
-        */
+        this.dis = dis;
+        isEOF = readNext();
     }
 
     private boolean readNext() throws IOException {
@@ -27,6 +26,7 @@ public class DataManager {
         ret.setLeft(tuple.getLeft());
         ret.setMiddle(tuple.getMiddle());
         ret.setRight(tuple.getRight());
-        isEOF = (!readNext());
+        isEOF = readNext();
     }
 }
+
