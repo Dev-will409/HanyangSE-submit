@@ -1,11 +1,26 @@
 package edu.hanyang.submit;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 
 import io.github.hyerica_bdml.indexer.BPlusTree;
 
 
 public class HanyangSEBPlusTree implements BPlusTree {
+
+
+
+    public class Node{
+        InternalNode parent;
+    }
+
+    private class InternalNode extends Node{
+        int maxDegree;
+        int minDegree;
+    }
+
+
 
     /**
      * B+ tree를 open하는 함수(파일을 열고 준비하는 단계 구현)
@@ -17,7 +32,10 @@ public class HanyangSEBPlusTree implements BPlusTree {
      */
     @Override
     public void open(String metafile, String treefile, int blocksize, int nblocks) throws IOException {
-        // TODO: your code here...
+        RandomAccessFile raf = new RandomAccessFile("./data/posting_list.data","rw");
+        raf.seek(nblocks);
+        byte[] bytes = new byte[nblocks];
+        System.out.println(raf.readLine());
     }
 
     /**
@@ -51,4 +69,28 @@ public class HanyangSEBPlusTree implements BPlusTree {
     public void close() throws IOException {
         // TODO: your code here...
     }
+
+    public static void main(String[] args) {
+        String metapath = "./tmp/bplustree.meta";
+        String savepath = "./tmp/bplustree.tree";
+        int blocksize = 52;
+        int nblocks = 10;
+
+        File treefile = new File(savepath);
+        if (treefile.exists()) {
+            if (! treefile.delete()) {
+                System.err.println("error: cannot remove files");
+                System.exit(1);
+            }
+        }
+
+        HanyangSEBPlusTree tree = new HanyangSEBPlusTree();
+        try {
+            tree.open(metapath, savepath, blocksize, nblocks);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
+
+
